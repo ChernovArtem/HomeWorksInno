@@ -81,7 +81,7 @@ public class Person implements Comparable<Person> {
             result = this.getName().compareTo(o.getName());
         }
         if (result == 0) {
-            throw new RuntimeException(new DublicatePersonException("Dublicate Person!"));
+            throw new DublicatePersonException("Dublicate Person!");
         }
 
         return result;

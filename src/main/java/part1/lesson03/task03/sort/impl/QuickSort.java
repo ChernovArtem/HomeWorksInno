@@ -1,20 +1,20 @@
-package part1.lesson03.task03.sort;
+package part1.lesson03.task03.sort.impl;
 
 import part1.lesson03.task03.Person;
-import part1.lesson03.task03.impl.SortImpl;
+import part1.lesson03.task03.sort.Sort;
 
 /**
  * Быстрая сортировка
  */
-public class QuickSort implements SortImpl {
+public class QuickSort implements Sort {
 
-    public void sort(Person[] persons) {
+    public long sort(Person[] persons) {
         long startTime = System.currentTimeMillis();
 
         quickSort(persons, 0, persons.length - 1);
 
         long execTime = System.currentTimeMillis() - startTime;
-        printResult("quickSort", persons, execTime);
+        return execTime;
     }
 
     private void quickSort(Person[] persons, int leftBorder, int rightBorder) {

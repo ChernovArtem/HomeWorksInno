@@ -1,14 +1,14 @@
-package part1.lesson03.task03.sort;
+package part1.lesson03.task03.sort.impl;
 
 import part1.lesson03.task03.Person;
-import part1.lesson03.task03.impl.SortImpl;
+import part1.lesson03.task03.sort.Sort;
 
 /**
  * Сортировка пузырьком
  */
-public class BubbleSort implements SortImpl {
+public class BubbleSort implements Sort {
 
-    public void sort(Person[] persons) {
+    public long sort(Person[] persons) {
         long startTime = System.currentTimeMillis();
 
         boolean sorted = false;
@@ -26,6 +26,6 @@ public class BubbleSort implements SortImpl {
         }
 
         long execTime = System.currentTimeMillis() - startTime;
-        printResult("bubbleSort", persons, execTime);
+        return execTime;
     }
 }

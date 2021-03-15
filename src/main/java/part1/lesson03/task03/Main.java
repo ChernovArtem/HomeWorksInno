@@ -1,8 +1,8 @@
 package part1.lesson03.task03;
 
-import part1.lesson03.task03.impl.SortImpl;
-import part1.lesson03.task03.sort.BubbleSort;
-import part1.lesson03.task03.sort.QuickSort;
+import part1.lesson03.task03.sort.Sort;
+import part1.lesson03.task03.sort.impl.BubbleSort;
+import part1.lesson03.task03.sort.impl.QuickSort;
 
 import java.util.Random;
 
@@ -14,11 +14,14 @@ public class Main {
         Person[] persons = generationPersons(lengthArray);
         Person[] persons2 = persons.clone();
 
-        SortImpl bubbleSort = new BubbleSort();
-        SortImpl quickSort = new QuickSort();
+        Sort bubbleSort = new BubbleSort();
+        Sort quickSort = new QuickSort();
 
-        bubbleSort.sort(persons);
-        quickSort.sort(persons2);
+        long execTime = bubbleSort.sort(persons);
+        quickSort.printResult("bubbleSort", persons, execTime);
+
+        execTime = quickSort.sort(persons2);
+        quickSort.printResult("quickSort", persons, execTime);
     }
 
     /**

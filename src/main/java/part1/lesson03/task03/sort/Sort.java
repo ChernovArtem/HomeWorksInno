@@ -1,18 +1,18 @@
-package part1.lesson03.task03.impl;
+package part1.lesson03.task03.sort;
 
 import part1.lesson03.task03.Person;
-import part1.lesson03.task03.exception.DublicatePersonException;
 
 /**
  * Интерфейс сортировки
  */
-public interface SortImpl {
+public interface Sort {
 
     /**
      * Метод сортировки
      * @param persons - массив класса {@link Person}
+     * @return - время выполнения сортировки
      */
-    void sort(Person[] persons);
+    long sort(Person[] persons);
 
     /**
      * Вывод выполнения сортировки
