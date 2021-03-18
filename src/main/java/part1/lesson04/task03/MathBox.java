@@ -3,8 +3,6 @@ package part1.lesson04.task03;
 import part1.lesson04.task01.exception.DublicateNumberException;
 import part1.lesson04.task01.exception.WrongTypeNumberException;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
 

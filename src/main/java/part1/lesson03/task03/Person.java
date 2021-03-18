@@ -12,7 +12,7 @@ public class Person implements Comparable<Person> {
     /**
      * Перечисление пола
      */
-    enum Sex {
+    public enum Sex {
         MAN,
         WOMAN
     }
