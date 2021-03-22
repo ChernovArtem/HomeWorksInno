@@ -1,4 +1,4 @@
-package part1.lesson05.task01.exception;
+package part1.lesson05.exception;
 
 public class DublicateUnidException extends RuntimeException {
     public DublicateUnidException() {

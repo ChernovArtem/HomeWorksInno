@@ -1,9 +1,9 @@
-package part1.lesson05.task01;
+package part1.lesson05;
 
 import part1.lesson03.task03.Person;
-import part1.lesson05.task01.exception.DublicateUnidException;
-import part1.lesson05.task01.exception.NotFoundUnidException;
-import part1.lesson05.task01.object.Animal;
+import part1.lesson05.exception.DublicateUnidException;
+import part1.lesson05.exception.NotFoundUnidException;
+import part1.lesson05.object.Animal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

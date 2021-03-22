@@ -1,4 +1,4 @@
-package part1.lesson05.task01.exception;
+package part1.lesson05.exception;
 
 public class NotFoundUnidException extends RuntimeException {
     public NotFoundUnidException() {

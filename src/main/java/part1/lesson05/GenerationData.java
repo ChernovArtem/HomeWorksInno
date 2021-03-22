@@ -1,7 +1,7 @@
-package part1.lesson05.task01;
+package part1.lesson05;
 
 import part1.lesson03.task03.Person;
-import part1.lesson05.task01.object.Animal;
+import part1.lesson05.object.Animal;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package part1.lesson05.task01.object;
+package part1.lesson05.object;
 
 import part1.lesson03.task03.Person;
 import java.util.Objects;
