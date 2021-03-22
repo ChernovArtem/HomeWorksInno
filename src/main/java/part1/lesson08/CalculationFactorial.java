@@ -63,7 +63,7 @@ public class CalculationFactorial implements Callable<BigInteger> {
         //перемножаем числа из очереди в новых потоках
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         do {
-            executorService.submit(new MyRunnable());
+            executorService.submit(new MultiplyRunnable());
 
             try {
                 Thread.sleep(1);
@@ -81,26 +81,22 @@ public class CalculationFactorial implements Callable<BigInteger> {
     /**
      * Класс перемножения чисел в новых потоках
      */
-    private class MyRunnable implements Runnable {
+    private class MultiplyRunnable implements Runnable {
 
         /**
          * Перемножаем числа из очереди, если они есть, а потом перемножаем с результатом
          */
         @Override
         public void run() {
-            BigInteger number1 = null;
-            BigInteger number2 = null;
 
-            if (queue.peek() != null) {
-                number1 = queue.poll();
-            }
-            if (queue.peek() != null) {
-                number2 = queue.poll();
-            }
-            if (number1 != null && number2 != null) {
-                number1 = number1.multiply(number2);
-            }
-            if (number1 != null) {
+            BigInteger number1;
+            if ((number1 = queue.poll()) != null) {
+
+                BigInteger number2;
+                if ((number2 = queue.poll()) != null) {
+                    number1 = number1.multiply(number2);
+                }
+
                 synchronized (result) {
                     result = result.multiply(number1);
                 }
