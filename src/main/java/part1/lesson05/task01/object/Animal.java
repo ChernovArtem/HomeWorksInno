@@ -10,16 +10,16 @@ public class Animal {
 
 
     /** универсальный идентификатор */
-    private int unid;
+    final private int unid;
 
     /** кличка животного */
-    private String nickname;
+    final private String nickname;
 
     /** владелец */
-    private Person owner;
+    final private Person owner;
 
     /** вес */
-    private int weight;
+    final private int weight;
 
     /**
      * Конструктор
