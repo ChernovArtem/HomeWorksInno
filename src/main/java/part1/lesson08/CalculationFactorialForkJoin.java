@@ -4,13 +4,13 @@ import java.math.BigInteger;
 import java.util.Queue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveAction;
 
 /**
  * Класс для подсчета результата факториала в новых потоках
  */
-public class CalculationFactorial implements Callable<BigInteger> {
+public class CalculationFactorialForkJoin implements Callable<BigInteger> {
 
     /** число по которому нужно посчитать факториал */
     private final int number;
@@ -29,7 +29,7 @@ public class CalculationFactorial implements Callable<BigInteger> {
      * @param factorialResultMap - класс с результатами факториалов
      * @param number - число по которому нужно посчитать факториал
      */
-    CalculationFactorial(FactorialResultMap factorialResultMap, int number) {
+    CalculationFactorialForkJoin(FactorialResultMap factorialResultMap, int number) {
         this.factorialResultMap = factorialResultMap;
         this.number = number;
     }
@@ -60,25 +60,10 @@ public class CalculationFactorial implements Callable<BigInteger> {
             queue.offer(BigInteger.valueOf(i));
         }
 
-        //перемножаем числа из очереди в новых потоках
-        ExecutorService executorService = Executors.newFixedThreadPool(4);
-        do {
-            executorService.submit(new MultiplyRunnable());
-
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException ex) {
-                throw new RuntimeException(ex);
-            }
-
-        } while (queue.peek() != null);
-        executorService.shutdown();
-
-        //циклом немного быстрее все же, чем с потоками
-//        BigInteger number1;
-//        while ((number1 = queue.poll()) != null) {
-//            result = result.multiply(number1);
-//        }
+        //перемножаем числа из очереди в новых потоках с помощью Fork/Join
+        ForkJoinPool forkJoinPool = new ForkJoinPool(10);
+        forkJoinPool.invoke(new MultiplyTask());
+        forkJoinPool.shutdown();
 
         factorialResultMap.setResult(number, result);
         return result;
@@ -87,24 +72,24 @@ public class CalculationFactorial implements Callable<BigInteger> {
     /**
      * Класс перемножения чисел в новых потоках
      */
-    private class MultiplyRunnable implements Runnable {
+    private class MultiplyTask extends RecursiveAction {
 
         /**
-         * Перемножаем числа из очереди, если они есть, а потом перемножаем с результатом
+         * Перемножаем число из очереди с результатом и создаем еще несколько потоков
          */
         @Override
-        public void run() {
-
+        protected void compute() {
             BigInteger number1;
             if ((number1 = queue.poll()) != null) {
-
-                BigInteger number2;
-                if ((number2 = queue.poll()) != null) {
-                    number1 = number1.multiply(number2);
-                }
-
                 synchronized (result) {
                     result = result.multiply(number1);
+                }
+
+                if (queue.peek() != null) {
+                    MultiplyTask task1 = new MultiplyTask();
+                    MultiplyTask task2 = new MultiplyTask();
+
+                    invokeAll(task1, task2);
                 }
             }
         }

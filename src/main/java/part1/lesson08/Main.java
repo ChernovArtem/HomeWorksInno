@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 
 public class Main {
 
@@ -15,7 +16,8 @@ public class Main {
 
         int[] numbers = generationNumber(size, borderRandom);
 
-        calculateFactorial(numbers);
+        calculateFactorial(numbers);            //1 вариант
+        calculateFactorialForkJoin(numbers);    //2 вариант
     }
 
     /**
@@ -36,7 +38,7 @@ public class Main {
     }
 
     /**
-     * Расчет факториала
+     * Расчет факториала с использованием ExecutorService
      * @param numbers - массив чисел
      */
     private static void calculateFactorial(int[] numbers) {
@@ -57,11 +59,44 @@ public class Main {
         }
         executorService.shutdown();
 
-        for (int number : numbers) {
-            System.out.println(number + "! = " + factorialResultMap.getResult(number));
-        }
+        printResult(numbers, factorialResultMap);
 
         long finishTime = System.currentTimeMillis();
         System.out.println("executionTime - " + (finishTime - startTime) + " ms");
+    }
+
+    /**
+     * Расчет факториала с использованием ForkJoinPool
+     * @param numbers - массив чисел
+     */
+    private static void calculateFactorialForkJoin(int[] numbers) {
+        final FactorialResultMap factorialResultMap = new FactorialResultMap();
+
+        List<CalculationFactorialForkJoin> calculationFactorialList = new ArrayList<>();
+        for (int number : numbers) {
+            calculationFactorialList.add(new CalculationFactorialForkJoin(factorialResultMap, number));
+        }
+
+        long startTime = System.currentTimeMillis();
+
+        ForkJoinPool forkJoinPool = new ForkJoinPool(10);
+        forkJoinPool.invokeAll(calculationFactorialList);
+        forkJoinPool.shutdown();
+
+        printResult(numbers, factorialResultMap);
+
+        long finishTime = System.currentTimeMillis();
+        System.out.println("executionTime - " + (finishTime - startTime) + " ms");
+    }
+
+    /**
+     * Выврд результата
+     * @param numbers - массив чисел
+     * @param factorialResultMap - результат факториалов
+     */
+    private static void printResult(int[] numbers, FactorialResultMap factorialResultMap) {
+        for (int number : numbers) {
+            System.out.println(number + "! = " + factorialResultMap.getResult(number));
+        }
     }
 }
