@@ -284,7 +284,7 @@ public class GenerationText {
      */
     public static String[] readWordsFromFile() {
 
-        final String FILENAME_IN = "src/main/resources/lesson07/task01/in.txt";
+        final String FILENAME_IN = "projectResources/lesson07/in.txt";
         Set<String> set = new HashSet<>();
 
         try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(FILENAME_IN))) {

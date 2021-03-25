@@ -12,8 +12,9 @@ import java.util.regex.Pattern;
 
 public class Main {
 
-    private static final String FILENAME_IN = "src/main/resources/lesson07/task01/in.txt";
-    private static final String FILENAME_OUT = "src/main/resources/lesson07/task01/out.txt";
+    private static final String PATHFILE = "projectResources/lesson07/";
+    private static final String FILENAME_IN = PATHFILE + "in.txt";
+    private static final String FILENAME_OUT = PATHFILE + "out.txt";
 
     public static void main(String[] args) {
         try {

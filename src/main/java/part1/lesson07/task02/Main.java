@@ -10,7 +10,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        final String path = "src/main/resources/lesson07/task02/";      //каталог где создать файлы
+        final String path = "projectResources/lesson07/";      //каталог где создать файлы
         int n = 5;                                                      //кол-во создаваемых файлов
         final int size = 10000;                                         //размер файлов
         //final String[] words = GenerationText.generationWords();      //массив слов (генерирование)
