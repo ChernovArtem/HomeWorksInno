@@ -1,8 +1,11 @@
 package part1.lesson08;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
@@ -42,7 +45,7 @@ public class Main {
      * @param numbers - массив чисел
      */
     private static void calculateFactorial(int[] numbers) {
-        final FactorialResultMap factorialResultMap = new FactorialResultMap();
+        final Map<Integer, BigInteger> factorialResultMap = new ConcurrentHashMap<>();
 
         List<CalculationFactorial> calculationFactorialList = new ArrayList<>();
         for (int number : numbers) {
@@ -70,7 +73,7 @@ public class Main {
      * @param numbers - массив чисел
      */
     private static void calculateFactorialForkJoin(int[] numbers) {
-        final FactorialResultMap factorialResultMap = new FactorialResultMap();
+        final Map<Integer, BigInteger> factorialResultMap = new ConcurrentHashMap<>();
 
         List<CalculationFactorialForkJoin> calculationFactorialList = new ArrayList<>();
         for (int number : numbers) {
@@ -90,13 +93,13 @@ public class Main {
     }
 
     /**
-     * Выврд результата
+     * Вывод результата
      * @param numbers - массив чисел
      * @param factorialResultMap - результат факториалов
      */
-    private static void printResult(int[] numbers, FactorialResultMap factorialResultMap) {
+    private static void printResult(int[] numbers, Map<Integer, BigInteger>  factorialResultMap) {
         for (int number : numbers) {
-            System.out.println(number + "! = " + factorialResultMap.getResult(number));
+            System.out.println(number + "! = " + factorialResultMap.get(number));
         }
     }
 }

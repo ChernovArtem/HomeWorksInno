@@ -1,6 +1,7 @@
 package part1.lesson08;
 
 import java.math.BigInteger;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -15,8 +16,8 @@ public class CalculationFactorial implements Callable<BigInteger> {
     /** число по которому нужно посчитать факториал */
     private final int number;
 
-    /** класс с результатами факториалов */
-    private final FactorialResultMap factorialResultMap;
+    /** словарь с результатами факториалов */
+    private final Map<Integer, BigInteger> factorialResultMap;
 
     /** очередь для перемножения чисел, тех что еще нет в справочнике */
     private final Queue<BigInteger> queue = new ConcurrentLinkedQueue<>();
@@ -26,10 +27,10 @@ public class CalculationFactorial implements Callable<BigInteger> {
 
     /**
      * Конструктор
-     * @param factorialResultMap - класс с результатами факториалов
+     * @param factorialResultMap - словарь с результатами факториалов
      * @param number - число по которому нужно посчитать факториал
      */
-    CalculationFactorial(FactorialResultMap factorialResultMap, int number) {
+    CalculationFactorial(Map<Integer, BigInteger>  factorialResultMap, int number) {
         this.factorialResultMap = factorialResultMap;
         this.number = number;
     }
@@ -44,9 +45,9 @@ public class CalculationFactorial implements Callable<BigInteger> {
 
         //проверяем что в справочнике уже есть результат факториала по этому числу
         if (factorialResultMap.containsKey(number)) {
-            return factorialResultMap.getResult(number);
+            return factorialResultMap.get(number);
         } else if (number == 0) {
-            factorialResultMap.setResult(number, result);
+            factorialResultMap.put(number, result);
             return result;
         }
 
@@ -54,7 +55,7 @@ public class CalculationFactorial implements Callable<BigInteger> {
         // проверяем на наибольшее число в справочнике, остальные добавляются в очередь для перемножения
         for (int i = number; i > 0; i--) {
             if (factorialResultMap.containsKey(i)) {
-                queue.offer(factorialResultMap.getResult(i));
+                queue.offer(factorialResultMap.get(i));
                 break;
             }
             queue.offer(BigInteger.valueOf(i));
@@ -80,7 +81,7 @@ public class CalculationFactorial implements Callable<BigInteger> {
 //            result = result.multiply(number1);
 //        }
 
-        factorialResultMap.setResult(number, result);
+        factorialResultMap.put(number, result);
         return result;
     }
 
