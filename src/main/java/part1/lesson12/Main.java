@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Main {
 
@@ -25,15 +23,13 @@ public class Main {
             numbers[i] = random.nextInt(borderRandom);
         }
 
-        //запускаеем многопоточку
         long startTime = System.currentTimeMillis();
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
 
         //используем стрим (быстро и коротко)
         Arrays.stream(numbers)
                 .distinct()
-                .forEach(number -> executorService.submit(() -> {
-
+                .parallel()
+                .forEach(number -> {
                     //проверяем есть ли значение в мапе, если нет, то высчитываем его
                     final BigInteger value = resultMap.computeIfAbsent(number, (key) -> {
                         BigInteger result = BigInteger.valueOf(1);
@@ -51,10 +47,7 @@ public class Main {
 
                     //проверяем значение в мапе, если его нет, то записываем
                     resultMap.putIfAbsent(number, value);
-                }));
-
-        //останавливаем многопоточку
-        executorService.shutdown();
+                });
 
         //выводим результаты
         Arrays.stream(numbers)
