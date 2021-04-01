@@ -5,12 +5,13 @@ import part1.lesson10.exception.FailedReflectionException;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Scanner;
 
@@ -57,53 +58,47 @@ public class Main {
      * @param text - код в виде текста, который нужно записать в метод
      */
     private static void writeTextToMethod(String filename, String text) {
+
         File file = new File(filename);
-
-        String data = readFileAndAddText(file, text);
-        writeFile(file, data);
-    }
-
-    /**
-     * Чтение файла и запись кода в метод
-     * @param file - файл, который нужно прочитать
-     * @param text - код, что нужно записать в метод
-     * @return - прочитанные данные из текста, с добавленным кодом в метод
-     */
-    private static String readFileAndAddText(File file, String text) {
         StringBuilder builder = new StringBuilder();
 
-        try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file))) {
+        //чтение файла
+        try (Reader reader = new FileReader(file)) {
 
-            int flag = 0;
-            while (bis.available() > 0) {
-
-                char chr = (char) bis.read();
-                builder.append(chr);
-
-                if ((flag == 0 && builder.toString().contains("public void doWork()"))
-                        || (flag == 1 && chr == ';')) {
-                    flag++;
-                } else if (flag == 1 && chr == '{') {
-                    builder.append("\n").append(text);
-                    flag++;
-                }
+            int chr;
+            while ((chr = reader.read()) != -1) {
+                builder.append((char) chr);
             }
+        } catch (FileNotFoundException ex) {
+            throw new RuntimeException("File not found!", ex);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
 
-        return builder.toString();
-    }
+        //поиск метода
+        int index = builder.indexOf("public void doWork()");
+        if (index <= 0) {
+            return;
+        }
 
-    /**
-     * Запись в файл
-     * @param file - файл, куда записывать
-     * @param data - данные, которые записать
-     */
-    private static void writeFile(File file, String data) {
-        try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file))) {
-            bos.write(data.getBytes());
-            bos.flush();
+        //ищем тело метода для записи,
+        //если тела нет, то ничего не записываем
+        char chr;
+        for (int i = ++index; i < builder.length(); i++) {
+
+            chr = builder.charAt(i);
+            if (chr == '{') {
+                builder.insert(++i, "\n" + text);
+                break;
+            } else if (chr == ';' || chr == '}') {
+                break;
+            }
+        }
+
+        //записываем в файл
+        try (Writer writer = new FileWriter(file)) {
+            writer.write(builder.toString());
+            writer.flush();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
