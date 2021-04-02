@@ -17,7 +17,7 @@ public class MyCustomClassLoader extends ClassLoader {
      * Конструктор
      * @param pathfile - путь и название class-файла
      */
-    MyCustomClassLoader(String pathfile) {
+    public MyCustomClassLoader(String pathfile) {
         this.pathfile = pathfile;
     }
 
