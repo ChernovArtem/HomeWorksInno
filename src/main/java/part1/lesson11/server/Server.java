@@ -16,7 +16,7 @@ public class Server extends Thread {
     private final ServerSocket serverSocket;
 
     /** словарь клиентов */
-    private final Map<String, SocketThread> clientMap = new ConcurrentHashMap();;
+    private final Map<String, SocketThread> clientMap = new ConcurrentHashMap<>();
 
     /**
      * Конструктор
