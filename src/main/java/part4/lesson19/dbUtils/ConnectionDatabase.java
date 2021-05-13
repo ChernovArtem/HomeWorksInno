@@ -10,32 +10,27 @@ import java.sql.SQLException;
 public class ConnectionDatabase {
 
     /**
-     * Подключение
-     */
-    private static Connection INSTANCE;
-
-    /**
-     *  Конструктор скрыт, клласс singleton
+     *  Конструктор скрыт, класс singleton
      */
     private ConnectionDatabase () {
 
     }
 
     /**
-     * Получение подключения, если его еще н ебыло, то инициализируем
+     * Получение подключения
      * @return подключение
      */
     public static Connection getInstance() {
-        if (INSTANCE == null) {
-            try {
-                INSTANCE = DriverManager.getConnection(
-                        "jdbc:postgresql://localhost:5432/onlineShop",
-                        "postgres",
-                        "1");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        try {
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:postgresql://localhost:5432/onlineShop",
+                    "postgres",
+                    "1");
+            connection.setAutoCommit(false);
+            return connection;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return INSTANCE;
+        return null;
     }
 }

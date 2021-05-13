@@ -1,5 +1,6 @@
 package part4.lesson19.dbUtils;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -84,7 +85,7 @@ public class InitializationDatabase {
     /**
      * Инициализация бд (удаление прошлых таблиц, создание новых и заполнение)
      */
-    public static void initTables() {
+    public void initTables() {
         deleteTables();
         createTables();
         insertTables();
@@ -94,7 +95,7 @@ public class InitializationDatabase {
      * Удаление таблиц
      * @throws SQLException ошибка связанная с SQL
      */
-    public static void deleteTables() {
+    public void deleteTables() {
         try {
             executeSQL(DELETE_TABLES);
         } catch (SQLException e) {
@@ -106,7 +107,7 @@ public class InitializationDatabase {
      * Создание таблиц
      * @throws SQLException ошибка связанная с SQL
      */
-    public static void createTables() {
+    public void createTables() {
         try {
             executeSQL(CREATE_TABLES);
         } catch (SQLException e) {
@@ -118,7 +119,7 @@ public class InitializationDatabase {
      * Заполнение таблиц
      * @throws SQLException ошибка связанная с SQL
      */
-    public static void insertTables()  {
+    public void insertTables()  {
         try {
             executeSQL(INSERT_TABLES);
         } catch (SQLException e) {
@@ -131,9 +132,11 @@ public class InitializationDatabase {
      * @param sql
      * @throws SQLException ошибка связанная с SQL
      */
-    private static void executeSQL(String sql) throws SQLException {
-        try (Statement statement = ConnectionDatabase.getInstance().createStatement()) {
+    private void executeSQL(String sql) throws SQLException {
+        try (Connection connection = ConnectionDatabase.getInstance();
+             Statement statement = connection.createStatement()) {
             statement.execute(sql);
+            connection.commit();
         }
     }
 }

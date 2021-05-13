@@ -7,44 +7,44 @@ import java.util.List;
 /**
  * Класс фасад, CRUD для объектов таблицы
  */
-public interface GeneralDao {
+public interface GeneralDao<T extends Entity> {
 
     /**
      * Получение всех объектов из таблицы
      * @return список всех объектов
-     * @throws SQLException ошибка связанная с SQL при roolback
+     * @throws SQLException ошибка связанная с SQL
      */
-    List<Entity> getAll() throws SQLException;
+    List<T> getAll() throws SQLException;
 
     /**
      * Получение объекта по id
      * @param id - id объекта, который нужно получить
      * @return объект из таблицы
-     * @throws SQLException ошибка связанная с SQL при roolback
+     * @throws SQLException ошибка связанная с SQL
      */
-    Entity getById(Integer id) throws SQLException;
+    T getById(Integer id) throws SQLException;
 
     /**
      * Добавление объекта в таблицу
      * @param entity - объект, который нужно добавить
      * @return true - если объект добавлен и не произошло ошибок
-     * @throws SQLException ошибка связанная с SQL при roolback
+     * @throws SQLException ошибка связанная с SQL
      */
-    boolean add(Entity entity) throws SQLException;
+    boolean add(T entity) throws SQLException;
 
     /**
      * Обновление объекта в таблице
      * @param entity - объект, который нужно обновить в таблице
      * @return true - если объект обновлен и не произошло ошибок
-     * @throws SQLException ошибка связанная с SQL при roolback
+     * @throws SQLException ошибка связанная с SQL
      */
-    boolean update(Entity entity) throws SQLException;
+    boolean update(T entity) throws SQLException;
 
     /**
      * Удаление объекта из таблицы
      * @param entity - объект, который нужно удалить
      * @return true - если объект добавлен и не произошло ошибок
-     * @throws SQLException ошибка связанная с SQL при roolback
+     * @throws SQLException ошибка связанная с SQL
      */
-    boolean delete(Entity entity) throws SQLException;
+    boolean delete(T entity) throws SQLException;
 }

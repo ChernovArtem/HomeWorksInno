@@ -3,7 +3,7 @@ package part4.lesson19.dao.methods;
 import part4.lesson19.dbUtils.ConnectionDatabase;
 import part4.lesson19.pojo.Entity;
 import part4.lesson19.pojo.Order;
-
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -14,26 +14,29 @@ import java.sql.SQLException;
 public class DeleteMethod {
 
     /**
-     *
-     * @param entity
-     * @param sql
+     * Удалить объект из бд
+     * @param entity - сущность, которую нужно удалить
+     * @param sql - запрос удаления
      * @return true - если объект добавлен и не произошло ошибок
-     * @throws SQLException ошибка связанная с SQL при roolback
+     * @throws SQLException ошибка связанная с SQL
      */
      protected boolean delete(Entity entity, String sql) throws SQLException {
-        try (PreparedStatement statement = ConnectionDatabase.getInstance().prepareStatement(sql)) {
+         try (Connection connection = ConnectionDatabase.getInstance()) {
+             try (PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setLong(1, entity.getId());
-            if (entity instanceof Order) {
-                statement.setLong(2, entity.getId());
-            }
-            statement.executeUpdate();
+                 statement.setLong(1, entity.getId());
+                 if (entity instanceof Order) {
+                     statement.setLong(2, entity.getId());
+                 }
+                 statement.executeUpdate();
+                 connection.commit();
 
-        } catch (SQLException e) {
-            ConnectionDatabase.getInstance().rollback();
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+             } catch (SQLException e) {
+                 connection.rollback();
+                 e.printStackTrace();
+                 return false;
+             }
+         }
+         return true;
     }
 }
