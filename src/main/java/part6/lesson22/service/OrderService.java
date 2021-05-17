@@ -1,10 +1,13 @@
-package part4.lesson19.service;
+package part6.lesson22.service;
 
-import part4.lesson19.dao.GeneralDao;
-import part4.lesson19.dao.impl.OrderDao;
-import part4.lesson19.pojo.Order;
-import part4.lesson19.pojo.Product;
-import part4.lesson19.pojo.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import part6.lesson22.dao.GeneralDao;
+import part6.lesson22.dao.impl.OrderDao;
+import part6.lesson22.pojo.Order;
+import part6.lesson22.pojo.Product;
+import part6.lesson22.pojo.User;
+
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +16,8 @@ import java.util.List;
  * Сервис по работе с заказами
  */
 public class OrderService {
+
+    private Logger log = LoggerFactory.getLogger(OrderService.class);
 
     /** Слой dao для работы с заказами */
     private GeneralDao<Order> orderDao = new OrderDao();
@@ -23,9 +28,10 @@ public class OrderService {
      */
     public List<Order> getAllOrders() {
         try {
+            log.debug("Method getAllOrders()");
             return orderDao.getAll();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQLException in method getAllOrders()", e);
         }
         return Collections.emptyList();
     }
@@ -39,10 +45,11 @@ public class OrderService {
      */
     public boolean addOrder(String status, User user, List<Product> products) {
         try {
+            log.debug("Method addOrder({}, {}, {})", status, user, products);
             Order order = new Order(status, user, products);
             orderDao.add(order);
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQLException in method addOrder()", e);
             return false;
         }
         return true;
@@ -56,11 +63,12 @@ public class OrderService {
      */
     public boolean updateStatusOrderById(Integer id, String status) {
         try {
+            log.debug("Method updateStatusOrderById({}, {})", id, status);
             Order order = orderDao.getById(id);
             order.setStatus(status);
             orderDao.update(order);
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQLException in method updateStatusOrderById()", e);
             return false;
         }
         return true;
@@ -73,10 +81,11 @@ public class OrderService {
      */
     public boolean deleteOrderById(Integer id) {
         try {
+            log.debug("Method deleteOrderById({})", id);
             Order order = orderDao.getById(id);
             orderDao.delete(order);
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("SQLException in method deleteOrderById()", e);
             return false;
         }
         return true;
