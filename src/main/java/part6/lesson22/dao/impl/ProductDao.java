@@ -23,26 +23,28 @@ public class ProductDao extends DeleteMethod implements GeneralDao<Product> {
     private Logger log = LoggerFactory.getLogger(ProductDao.class);
 
     /** Получение всех элементов из таблицы */
-    private static final String SELECT_ALL = "SELECT * FROM products";
+    public static final String SELECT_ALL = "SELECT * FROM products";
 
     /** Получение элемента по id */
-    private static final String SELECT_BY_ID = "SELECT * FROM products WHERE id = ?";
+    public static final String SELECT_BY_ID = "SELECT * FROM products WHERE id = ?";
 
     /** Добавление элемента в таблицу */
-    private static final String INSERT = "INSERT INTO products values (DEFAULT, ?, ?, ?, ?)";
+    public static final String INSERT = "INSERT INTO products values (DEFAULT, ?, ?, ?, ?)";
 
     /** Обновление элемента в таблице */
-    private static final String UPDATE = "UPDATE products SET type = ?, manufacturer = ?, name = ?, price = ? WHERE id = ?";
+    public static final String UPDATE = "UPDATE products SET type = ?, manufacturer = ?, name = ?, price = ? WHERE id = ?";
 
     /** Удаление элемемнта из таблицы */
-    private static final String DELETE = "DELETE FROM products WHERE id = ?";
+    public static final String DELETE = "DELETE FROM products WHERE id = ?";
+
+    private ConnectionDatabase connectionDatabase = new ConnectionDatabase();
 
     @Override
     public List<Product> getAll() throws SQLException {
         log.debug("Method getAll()");
 
         List<Product> list = new ArrayList();
-        try (Connection connection = ConnectionDatabase.getConnection()) {
+        try (Connection connection = connectionDatabase.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL);
                  ResultSet resultSet = statement.executeQuery()) {
                 log.debug("select all SQL: {}", SELECT_ALL);
@@ -70,7 +72,7 @@ public class ProductDao extends DeleteMethod implements GeneralDao<Product> {
     public Product getById(Integer id) throws SQLException {
         log.debug("Method getById({})", id);
 
-        try (Connection connection = ConnectionDatabase.getConnection()) {
+        try (Connection connection = connectionDatabase.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
 
                 statement.setLong(1, id);
@@ -101,7 +103,7 @@ public class ProductDao extends DeleteMethod implements GeneralDao<Product> {
     public boolean add(Product product) throws SQLException {
         log.debug("Method add({})", product);
 
-        try (Connection connection = ConnectionDatabase.getConnection()) {
+        try (Connection connection = connectionDatabase.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
                 statement.setString(1, product.getType());
@@ -126,7 +128,7 @@ public class ProductDao extends DeleteMethod implements GeneralDao<Product> {
     public boolean update(Product product) throws SQLException {
         log.debug("Method update({})", product);
 
-        try (Connection connection = ConnectionDatabase.getConnection()) {
+        try (Connection connection = connectionDatabase.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(UPDATE)) {
 
                 statement.setString(1, product.getType());

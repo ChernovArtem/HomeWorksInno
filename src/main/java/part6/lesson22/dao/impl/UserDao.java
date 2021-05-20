@@ -23,26 +23,28 @@ public class UserDao extends DeleteMethod implements GeneralDao<User> {
     private Logger log = LoggerFactory.getLogger(UserDao.class);
 
     /** Получение всех элементов из таблицы */
-    private static final String SELECT_ALL = "SELECT * FROM users";
+    public static final String SELECT_ALL = "SELECT * FROM users";
 
     /** Получение элемента по id */
-    private static final String SELECT_BY_ID = "SELECT * FROM users WHERE id = ?";
+    public static final String SELECT_BY_ID = "SELECT * FROM users WHERE id = ?";
 
     /** Добавление элемента в таблицу */
-    private static final String INSERT = "INSERT INTO users values (DEFAULT, ?, ?, ?, ?)";
+    public static final String INSERT = "INSERT INTO users values (DEFAULT, ?, ?, ?, ?)";
 
     /** Обновление элемента в таблице */
-    private static final String UPDATE = "UPDATE users SET fio = ?, address = ?, email = ?, telephone = ? WHERE id = ?";
+    public static final String UPDATE = "UPDATE users SET fio = ?, address = ?, email = ?, telephone = ? WHERE id = ?";
 
     /** Удаление элемемнта из таблицы */
-    private static final String DELETE = "DELETE FROM users WHERE id = ?";
+    public static final String DELETE = "DELETE FROM users WHERE id = ?";
+
+    private ConnectionDatabase connectionDatabase = new ConnectionDatabase();
 
     @Override
     public List<User> getAll() throws SQLException {
         log.debug("Method getAll()");
 
         List<User> list = new ArrayList();
-        try (Connection connection = ConnectionDatabase.getConnection()) {
+        try (Connection connection = connectionDatabase.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL);
                  ResultSet resultSet = statement.executeQuery()) {
                 log.debug("select all SQL: {}", SELECT_ALL);
@@ -71,7 +73,7 @@ public class UserDao extends DeleteMethod implements GeneralDao<User> {
 
         log.debug("Method getById({})", id);
 
-        try (Connection connection = ConnectionDatabase.getConnection()) {
+        try (Connection connection = connectionDatabase.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
 
                 statement.setLong(1, id);
@@ -102,7 +104,7 @@ public class UserDao extends DeleteMethod implements GeneralDao<User> {
     public boolean add(User user) throws SQLException {
         log.debug("Method add({})", user);
 
-        try (Connection connection = ConnectionDatabase.getConnection()) {
+        try (Connection connection = connectionDatabase.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
                 statement.setString(1, user.getFio());
@@ -127,7 +129,7 @@ public class UserDao extends DeleteMethod implements GeneralDao<User> {
     public boolean update(User user) throws SQLException {
         log.debug("Method update({})", user);
 
-        try (Connection connection = ConnectionDatabase.getConnection()) {
+        try (Connection connection = connectionDatabase.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(UPDATE)) {
 
                 statement.setString(1, user.getFio());

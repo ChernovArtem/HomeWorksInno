@@ -17,7 +17,7 @@ public class InitializationDatabase {
     /**
      * SQL на удаление таблиц
      */
-    private static final String DELETE_TABLES = "DROP TABLE IF EXISTS orders_products;"
+    public static final String DELETE_TABLES = "DROP TABLE IF EXISTS orders_products;"
             + "DROP TABLE IF EXISTS orders;"
             + "DROP TABLE IF EXISTS users;"
             + "DROP TABLE IF EXISTS products;"
@@ -26,7 +26,7 @@ public class InitializationDatabase {
     /**
      * SQL на создание таблиц
      */
-    private static final String CREATE_TABLES = "CREATE TABLE products (\n"
+    public static final String CREATE_TABLES = "CREATE TABLE products (\n"
             + "    id bigserial primary key,\n"
             + "    type varchar(100) NOT NULL,"
             + "    manufacturer varchar(100) NOT NULL,"
@@ -60,7 +60,7 @@ public class InitializationDatabase {
     /**
      * SQL на заполнение таблиц
      */
-    private static final String INSERT_TABLES = "INSERT INTO products (type, manufacturer, name, price)\n"
+    public static final String INSERT_TABLES = "INSERT INTO products (type, manufacturer, name, price)\n"
             + "VALUES\n"
             + "   ('Телефон', 'Xiaomi', 'MI 10T', 20000),\n"
             + "   ('Телефон', 'Xiaomi', 'MI 10', 15000),\n"
@@ -95,6 +95,8 @@ public class InitializationDatabase {
             + "   (3, 9),\n"
             + "   (4, 2),\n"
             + "   (5, 8);";
+
+    private ConnectionDatabase connectionDatabase = new ConnectionDatabase();
 
     /**
      * Инициализация бд (удаление прошлых таблиц, создание новых и заполнение)
@@ -152,7 +154,7 @@ public class InitializationDatabase {
      * @throws SQLException ошибка связанная с SQL
      */
     private void executeSQL(String sql) throws SQLException {
-        try (Connection connection = ConnectionDatabase.getConnection();
+        try (Connection connection = connectionDatabase.getConnection();
              Statement statement = connection.createStatement()) {
 
             log.debug("Method executeSQL(sql)");

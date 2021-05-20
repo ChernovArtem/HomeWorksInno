@@ -15,19 +15,11 @@ public class ConnectionDatabase {
     private static final Logger log = LoggerFactory.getLogger(ConnectionDatabase.class);
 
     /**
-     *  Конструктор скрыт, класс singleton
-     */
-    private ConnectionDatabase () {
-
-    }
-
-    /**
      * Получение подключения
      * @return подключение
      */
-    public static Connection getConnection() {
+    public Connection getConnection() {
         try {
-            log.debug("Method getConnection()");
             Connection connection = DriverManager.getConnection(
                     "jdbc:postgresql://localhost:5432/onlineShop",
                     "postgres",

@@ -14,6 +14,10 @@ public class OrderUtils {
 
     private Logger log = LoggerFactory.getLogger(OrderUtils.class);
 
+    private ProductService productService = new ProductService();
+
+    private UserService userService = new UserService();
+
     /**
      * Получение продукта по id
      * @param id - идентификатор продукта
@@ -21,8 +25,6 @@ public class OrderUtils {
      */
     public Product getProductById(Integer id) {
         log.debug("Method getProductById({})", id);
-
-        ProductService productService = new ProductService();
         return productService.getProductById(id);
     }
 
@@ -33,8 +35,6 @@ public class OrderUtils {
      */
     public User getUserById(Integer id) {
         log.debug("Method getUserById({})", id);
-
-        UserService userService = new UserService();
         return userService.getUserById(id);
     }
 }

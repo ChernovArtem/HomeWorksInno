@@ -11,6 +11,12 @@ public class Main {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
+    private ProductService productService = new ProductService();
+
+    private UserService userService = new UserService();
+
+    private OrderService orderService = new OrderService();
+
     /**
      * Если конфигурация log4j2 не подцепляется автоматически:
      * -Dlog4j.configurationFile=src/main/resources/log4j2.xml
@@ -21,12 +27,19 @@ public class Main {
         InitializationDatabase initDatabase = new InitializationDatabase();
         initDatabase.initTables();
 
+        Main main = new Main();
+        main.workWithProduct();
+        main.workWithUser();
+        main.workWithOrder();
+    }
+
+    /**
+     * работа с продуктом
+     */
+    public void workWithProduct() {
         log.debug("===========================");
-
-        //работа с продуктом
-        ProductService productService = new ProductService();
-
         log.debug("Products old:");
+
         productService.getAllProducts()
                 .forEach(product -> log.debug(product.toString()));
 
@@ -38,12 +51,15 @@ public class Main {
         log.debug("Products new:");
         productService.getAllProducts()
                 .forEach(product -> log.debug(product.toString()));
+    }
+
+    /**
+     * работа с пользователем
+     */
+    public void workWithUser() {
         log.debug("===========================");
-
-        //работа с пользователем
-        UserService userService = new UserService();
-
         log.debug("Users old:");
+
         userService.getAllUsers()
                 .forEach(user -> log.debug(user.toString()));
 
@@ -56,12 +72,15 @@ public class Main {
         log.debug("Users new:");
         userService.getAllUsers()
                 .forEach(user -> log.debug(user.toString()));
+    }
+
+    /**
+     * работа с заказами
+     */
+    public void workWithOrder() {
         log.debug("===========================");
-
-        //работа с заказами
-        OrderService orderService = new OrderService();
-
         log.debug("Orders old:");
+
         orderService.getAllOrders()
                 .forEach(order -> log.debug(order.toString()));
 
@@ -74,6 +93,7 @@ public class Main {
         log.debug("Orders new:");
         orderService.getAllOrders()
                 .forEach(order -> log.debug(order.toString()));
+
         log.debug("===========================");
     }
 }

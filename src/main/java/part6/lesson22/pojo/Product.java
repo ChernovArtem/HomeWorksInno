@@ -118,16 +118,15 @@ public class Product extends Entity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return price == product.price &&
-                Objects.equals(id, product.id) &&
-                Objects.equals(type, product.type) &&
+        return Objects.equals(type, product.type) &&
                 Objects.equals(manufacturer, product.manufacturer) &&
-                Objects.equals(name, product.name);
+                Objects.equals(name, product.name) &&
+                Objects.equals(price, product.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, type, manufacturer, name, price);
+        return Objects.hash(type, manufacturer, name, price);
     }
 
     @Override

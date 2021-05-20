@@ -26,26 +26,28 @@ public class OrderDao extends DeleteMethod implements GeneralDao<Order> {
     private Logger log = LoggerFactory.getLogger(OrderDao.class);
 
     /** Получение всех элементов из таблицы */
-    private static final String SELECT_ALL = "SELECT * FROM orders";
+    public static final String SELECT_ALL = "SELECT * FROM orders";
 
     /** Получение элемента по id */
-    private static final String SELECT_BY_ID = "SELECT * FROM orders WHERE id = ?";
+    public static final String SELECT_BY_ID = "SELECT * FROM orders WHERE id = ?";
 
     /** Получение всех элементов из таблицы по id */
-    private static final String SELECT_PRODUCTS = "SELECT * FROM orders_products WHERE order_id = ?";
+    public static final String SELECT_PRODUCTS = "SELECT * FROM orders_products WHERE order_id = ?";
 
     /** Добавление элемента в таблицу */
-    private static final String INSERT = "INSERT INTO orders values (DEFAULT, ?, ?)";
+    public static final String INSERT = "INSERT INTO orders values (DEFAULT, ?, ?)";
 
     /** Добавление элемента в таблицу */
-    private static final String INSERT_PRODUCTS = "INSERT INTO orders_products values (?, ?)";
+    public static final String INSERT_PRODUCTS = "INSERT INTO orders_products values (?, ?)";
 
     /** Обновление элемента в таблице */
-    private static final String UPDATE = "UPDATE orders SET status = ? WHERE id = ?";
+    public static final String UPDATE = "UPDATE orders SET status = ? WHERE id = ?";
 
     /** Удаление элемемнта из таблицы */
-    private static final String DELETE = "DELETE FROM orders_products WHERE order_id = ?;\n"
+    public static final String DELETE = "DELETE FROM orders_products WHERE order_id = ?;\n"
             + "DELETE FROM orders WHERE id = ?";
+
+    private ConnectionDatabase connectionDatabase = new ConnectionDatabase();
 
     /** Сервис для помомощи в получении пользователя и продуктов по их id */
     private OrderUtils orderUtils = new OrderUtils();
@@ -55,7 +57,7 @@ public class OrderDao extends DeleteMethod implements GeneralDao<Order> {
         log.debug("Method getAll()");
 
         List<Order> list = new ArrayList();
-        try (Connection connection = ConnectionDatabase.getConnection()) {
+        try (Connection connection = connectionDatabase.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL);
                  ResultSet resultSet = statement.executeQuery()) {
                 log.debug("select all SQL: {}", SELECT_ALL);
@@ -84,7 +86,7 @@ public class OrderDao extends DeleteMethod implements GeneralDao<Order> {
     public Order getById(Integer id) throws SQLException {
         log.debug("Method getById({})", id);
 
-        try (Connection connection = ConnectionDatabase.getConnection()) {
+        try (Connection connection = connectionDatabase.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
 
                 statement.setLong(1, id);
@@ -116,7 +118,7 @@ public class OrderDao extends DeleteMethod implements GeneralDao<Order> {
     public boolean add(Order order) throws SQLException {
         log.debug("Method add({})", order);
 
-        try (Connection connection = ConnectionDatabase.getConnection()) {
+        try (Connection connection = connectionDatabase.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
                 statement.setString(1, order.getStatus());
@@ -156,7 +158,7 @@ public class OrderDao extends DeleteMethod implements GeneralDao<Order> {
     public boolean update(Order order) throws SQLException {
         log.debug("Method update({})", order);
 
-        try (Connection connection = ConnectionDatabase.getConnection()) {
+        try (Connection connection = connectionDatabase.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(UPDATE)) {
 
                 statement.setString(1, order.getStatus());

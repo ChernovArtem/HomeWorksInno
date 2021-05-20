@@ -18,6 +18,8 @@ public class DeleteMethod {
 
     private final static Logger log = LoggerFactory.getLogger(DeleteMethod.class);
 
+    private ConnectionDatabase connectionDatabase = new ConnectionDatabase();
+
     /**
      * Удалить объект из бд
      * @param entity - сущность, которую нужно удалить
@@ -29,7 +31,7 @@ public class DeleteMethod {
 
          log.debug("Method delete({})", entity);
 
-         try (Connection connection = ConnectionDatabase.getConnection()) {
+         try (Connection connection = connectionDatabase.getConnection()) {
              try (PreparedStatement statement = connection.prepareStatement(sql)) {
 
                  statement.setLong(1, entity.getId());

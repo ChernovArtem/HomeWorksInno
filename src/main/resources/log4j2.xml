@@ -5,7 +5,8 @@
             <PatternLayout pattern="%m%n"/>
         </Console>
 
-        <RollingFile name="errorFile" fileName="logs/error.log" filePattern="logs/$${date:yyyy-MM}/error-%d{MM-dd-yyyy}-%i.log">
+        <RollingFile name="errorFile" fileName="logs/error.log"
+                     filePattern="logs/$${date:yyyy-MM}/error-%d{MM-dd-yyyy}-%i.log">
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
@@ -14,7 +15,8 @@
                 <SizeBasedTriggeringPolicy size="20 KB"/>
             </Policies>
         </RollingFile>
-        <RollingFile name="resultFile" fileName="logs/result.log" filePattern="logs/$${date:yyyy-MM}/result-%d{MM-dd-yyyy}-%i.log">
+        <RollingFile name="resultFile" fileName="logs/result.log"
+                     filePattern="logs/$${date:yyyy-MM}/result-%d{MM-dd-yyyy}-%i.log">
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
@@ -23,7 +25,8 @@
                 <SizeBasedTriggeringPolicy size="10 KB"/>
             </Policies>
         </RollingFile>
-        <RollingFile name="debugDAOFile" fileName="logs/debugDAO.log" filePattern="logs/$${date:yyyy-MM}/debugDAO-%d{MM-dd-yyyy}-%i.log">
+        <RollingFile name="daoDebugFile" fileName="logs/dao-debug.log"
+                     filePattern="logs/$${date:yyyy-MM}/dao-debug-%d{MM-dd-yyyy}-%i.log">
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
@@ -32,7 +35,8 @@
                 <SizeBasedTriggeringPolicy size="40 KB"/>
             </Policies>
         </RollingFile>
-        <RollingFile name="debugServiceFile" fileName="logs/debugService.log" filePattern="logs/$${date:yyyy-MM}/debugService-%d{MM-dd-yyyy}-%i.log">
+        <RollingFile name="serviceDebugFile" fileName="logs/service-debug.log"
+                     filePattern="logs/$${date:yyyy-MM}/service-%d{MM-dd-yyyy}-debug-%i.log">
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
@@ -41,7 +45,8 @@
                 <SizeBasedTriggeringPolicy size="10 KB"/>
             </Policies>
         </RollingFile>
-        <RollingFile name="debugDbUtilsFile" fileName="logs/debugDbUtils.log" filePattern="logs/$${date:yyyy-MM}/debugDbUtils-%d{MM-dd-yyyy}-%i.log">
+        <RollingFile name="dbUtilsDebugFile" fileName="logs/dbUtils-debug.log"
+                     filePattern="logs/$${date:yyyy-MM}/dbUtils-%d{MM-dd-yyyy}-debug-%i.log">
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
@@ -52,7 +57,8 @@
         </RollingFile>
 
         <JDBC name="databaseAppender" tableName="logs">
-            <ConnectionFactory class="part6.lesson22.dbUtils.ConnectionDatabase" method="getConnection" />
+            <DriverManager connectionString="jdbc:postgresql://localhost:5432/onlineShop"
+                           driverClassName="org.postgresql.Driver" username="postgres" password="1"/>
             <Column name="logId" pattern="%u" isUnicode="false"/>
             <Column name="eventDate" isEventTimestamp="true" isUnicode="false"/>
             <Column name="level" pattern="%level" isUnicode="false"/>
@@ -73,13 +79,13 @@
             <AppenderRef ref="databaseAppender" level="DEBUG"/>
         </Logger>
         <Logger name="part6.lesson22.dao" level="debug" additivity="false">
-            <AppenderRef ref="debugDAOFile" level="DEBUG"/>
+            <AppenderRef ref="daoDebugFile" level="DEBUG"/>
         </Logger>
         <Logger name="part6.lesson22.service" level="debug" additivity="false">
-            <AppenderRef ref="debugServiceFile" level="DEBUG"/>
+            <AppenderRef ref="serviceDebugFile" level="DEBUG"/>
         </Logger>
         <Logger name="part6.lesson22.dbUtils" level="debug" additivity="false">
-            <AppenderRef ref="debugDbUtilsFile" level="DEBUG"/>
+            <AppenderRef ref="dbUtilsDebugFile" level="DEBUG"/>
         </Logger>
     </Loggers>
 </Configuration>
